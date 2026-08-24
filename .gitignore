@@ -1,0 +1,25 @@
+# Data and checkpoints
+checkpoints/
+data/
+datasets/
+*.pth
+*.pt
+*.tif
+!figures/*.png
+
+# Outputs
+outputs/
+runs/
+/history/
+*.eval.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Environment / secrets
+.env
+*.key
+api_key*
