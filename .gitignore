@@ -1,7 +1,7 @@
 # Data and checkpoints
 checkpoints/
-data/
 datasets/
+!data/splits/*.txt
 *.pth
 *.pt
 *.tif

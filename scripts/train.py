@@ -4,7 +4,7 @@ training notebook (notebooks/train_paper_models_seeds42-44.ipynb); only the
 Kaggle paths and the seed list are exposed as command-line arguments.
 
 Example:
-    python scripts/train_paper_models.py \
+    python scripts/train.py \
         --data-root /path/to/OpenEarthMap_wo_xBD \
         --train-txt train.txt --val-txt val.txt --test-txt test.txt \
         --osm-roads-dir /path/to/osm/roads/binary_masks \
@@ -204,7 +204,7 @@ def main():
                         
                         if run['use_osm_data'] and 'osm' in batch:
                             masks_osm = batch['osm'].to(device, non_blocking=True)
-                            road_probs = torch.sigmoid(logits_osm[:, 1:2])
+                            road_probs = torch.sigmoid(logits_osm[:, 0:1])
                             dt_targets = torch.from_numpy(
                                 np.stack([_distance_transform_weights(mask, run['dt_max_distance']) for mask in masks_osm.detach().cpu().numpy()])
                             ).to(device=device, dtype=road_probs.dtype).unsqueeze(1)
@@ -212,7 +212,7 @@ def main():
                             
                         if run['use_bldg_data'] and 'osm_bldg' in batch:
                             masks_bldg = batch['osm_bldg'].to(device, non_blocking=True)
-                            bldg_probs = torch.sigmoid(logits_osm[:, 2:3])
+                            bldg_probs = torch.sigmoid(logits_osm[:, 1:2])
                             dt_targets_bldg = torch.from_numpy(
                                 np.stack([_distance_transform_weights(mask, run['dt_max_distance']) for mask in masks_bldg.detach().cpu().numpy()])
                             ).to(device=device, dtype=bldg_probs.dtype).unsqueeze(1)

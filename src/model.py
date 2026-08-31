@@ -122,9 +122,10 @@ class DualDecoder_SAM2UNet(nn.Module):
         self.side2 = nn.Conv2d(64, num_classes, kernel_size=1)
         self.head = nn.Conv2d(64, num_classes, kernel_size=1)
         
-        self.osm_side1 = nn.Conv2d(64, 3, kernel_size=1)
-        self.osm_side2 = nn.Conv2d(64, 3, kernel_size=1)
-        self.osm_head = nn.Conv2d(64, 3, kernel_size=1)
+        # OSM auxiliary head: channel 0 = roads, channel 1 = buildings
+        self.osm_side1 = nn.Conv2d(64, 2, kernel_size=1)
+        self.osm_side2 = nn.Conv2d(64, 2, kernel_size=1)
+        self.osm_head = nn.Conv2d(64, 2, kernel_size=1)
         
         self.upsample8 = nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)
         self.upsample4 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)
