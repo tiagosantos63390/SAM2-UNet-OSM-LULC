@@ -5,6 +5,9 @@ from typing import Dict, Optional, Sequence, Union
 import math
 import time
 import warnings
+import inspect
+import hashlib
+import json
 
 import numpy as np
 import pandas as pd
@@ -12,8 +15,32 @@ import geopandas as gpd
 import matplotlib.pyplot as plt
 
 import rasterio
-from rasterio.transform import from_bounds
+from rasterio.transform import Affine
 from rasterio.features import rasterize
+
+
+def make_disk(radius_pixels: int) -> np.ndarray:
+    radius_pixels = int(radius_pixels)
+    if radius_pixels < 0:
+        raise ValueError('Road radius must be nonnegative')
+    grid = np.arange(-radius_pixels, radius_pixels + 1)
+    yy, xx = np.meshgrid(grid, grid)
+    return (xx * xx + yy * yy) <= (radius_pixels * radius_pixels)
+
+
+def thicken_mask(mask: np.ndarray, radius_pixels: int = 3) -> np.ndarray:
+    structure = make_disk(radius_pixels)
+    mask_bool = mask > 0
+    padded = np.pad(mask_bool, radius_pixels, mode='constant', constant_values=False)
+    thickened = np.zeros_like(mask_bool, dtype=bool)
+    for dy, dx in np.argwhere(structure):
+        dy -= radius_pixels
+        dx -= radius_pixels
+        thickened |= padded[
+            radius_pixels + dy:radius_pixels + dy + mask_bool.shape[0],
+            radius_pixels + dx:radius_pixels + dx + mask_bool.shape[1],
+        ]
+    return thickened.astype(np.uint8)
 
 
 class OSMPatchProcessor:
@@ -33,6 +60,13 @@ class OSMPatchProcessor:
         "barrier",
         "man_made",
     ]
+    # Value predicates from extract-osm-masks-kaggle v22.
+    CLASS_TAGS = {
+        'highway': {'highway': True},
+        'building': {'building': True},
+        'water': {'natural': ['water', 'waterway'], 'landuse': ['reservoir', 'basin']},
+        'trees': {'natural': ['wood', 'scrub', 'tree_row'], 'landuse': ['forest']},
+    }
 
     REQUIRED_COLUMNS = [
         "filename", "crs", "width_px", "height_px",
@@ -74,18 +108,18 @@ class OSMPatchProcessor:
 
         if "filepath" in row.index and pd.notna(row["filepath"]):
             csv_path = Path(str(row["filepath"]))
-            if csv_path.exists():
+            if csv_path.is_file():
                 return csv_path
 
         if self.image_root is not None:
-            split_name = filename.split("_")[0].lower()
+            split_name = Path(filename).stem.rsplit('_', 1)[0]
             candidate_paths = [
                 self.image_root / split_name / "images" / filename,
                 self.image_root / split_name / filename,
                 self.image_root / filename,
             ]
             for candidate in candidate_paths:
-                if candidate.exists():
+                if candidate.is_file():
                     return candidate
 
         raise FileNotFoundError(
@@ -123,37 +157,66 @@ class OSMPatchProcessor:
 
     def get_patch_bounds_wgs84(self, patch_id: Union[int, str]) -> Dict[str, float]:
         row = self.get_patch_row(patch_id)
-        return {
+        bounds = {
             "west": float(row["left_wgs84"]),
             "south": float(row["bottom_wgs84"]),
             "east": float(row["right_wgs84"]),
             "north": float(row["top_wgs84"]),
         }
+        if not (-180 <= bounds['west'] < bounds['east'] <= 180
+                and -90 <= bounds['south'] < bounds['north'] <= 90):
+            raise ValueError(f'Invalid WGS84 bounds for {patch_id}: {bounds}')
+        return bounds
 
     def get_patch_profile(self, patch_id: Union[int, str], dtype: str = "uint8", count: int = 1) -> Dict:
         row = self.get_patch_row(patch_id)
-        transform = from_bounds(
-            float(row["left"]),
-            float(row["bottom"]),
-            float(row["right"]),
-            float(row["top"]),
-            int(row["width_px"]),
-            int(row["height_px"]),
-        )
+        crs = rasterio.crs.CRS.from_user_input(row['crs'])
+        width, height = int(row['width_px']), int(row['height_px'])
+        if width <= 0 or height <= 0 or width != float(row['width_px']) or height != float(row['height_px']):
+            raise ValueError(f'Invalid grid dimensions for {patch_id}')
+        try:
+            image_path = self.resolve_patch_image_path(patch_id)
+        except FileNotFoundError:
+            image_path = None
+        if image_path is not None:
+            with rasterio.open(image_path) as src:
+                if src.crs != crs or src.width != width or src.height != height:
+                    raise ValueError(f'Source grid disagrees with metadata for {patch_id}')
+                transform = src.transform
+        else:
+            columns = [f'transform_{key}' for key in 'abcdef']
+            if not all(key in row.index and pd.notna(row[key]) for key in columns):
+                raise ValueError(f'Exact affine unavailable for {patch_id}; provide source TIFFs or re-extract metadata')
+            transform = Affine(*(float(row[key]) for key in columns))
+        if (not np.isfinite(tuple(transform)).all()
+                or transform.a * transform.e - transform.b * transform.d == 0):
+            raise ValueError(f'Unsupported affine grid for {patch_id}')
+        corners = [transform * point for point in ((0, 0), (width, 0), (0, height), (width, height))]
+        xs, ys = zip(*corners)
+        bounds = (min(xs), min(ys), max(xs), max(ys))
+        if not np.allclose(bounds, [row[k] for k in ('left', 'bottom', 'right', 'top')], rtol=0, atol=1e-6):
+            raise ValueError(f'Affine bounds disagree with metadata for {patch_id}')
         return {
             "driver": "GTiff",
             "height": int(row["height_px"]),
             "width": int(row["width_px"]),
             "count": int(count),
             "dtype": dtype,
-            "crs": row["crs"],
+            "crs": crs,
             "transform": transform,
             "compress": "lzw",
         }
 
-    def build_tags_filter(self, semantic_keys: Optional[Sequence[str]] = None) -> Dict[str, bool]:
+    def build_tags_filter(self, semantic_keys: Optional[Sequence[str]] = None) -> Dict:
         keys = list(semantic_keys) if semantic_keys is not None else self.semantic_keys
-        return {k: True for k in keys}
+        tags = {}
+        for name in keys:
+            for key, values in self.CLASS_TAGS.get(name, {name: True}).items():
+                if tags.get(key) is True or values is True:
+                    tags[key] = True
+                else:
+                    tags[key] = sorted(set(tags.get(key, []) + list(values)))
+        return tags
 
     @staticmethod
     def _import_osmnx():
@@ -176,7 +239,8 @@ class OSMPatchProcessor:
     ) -> gpd.GeoDataFrame:
         ox = self._import_osmnx()
 
-        try:
+        parameters = inspect.signature(ox.features_from_bbox).parameters
+        if all(key in parameters for key in ('north', 'south', 'east', 'west')):
             return ox.features_from_bbox(
                 north=north,
                 south=south,
@@ -184,23 +248,9 @@ class OSMPatchProcessor:
                 west=west,
                 tags=tags,
             )
-        except TypeError:
-            pass
-
-        bbox_candidates = [
-            (west, south, east, north),
-            (south, west, north, east),
-            (north, south, east, west),
-        ]
-
-        last_error = None
-        for bbox in bbox_candidates:
-            try:
-                return ox.features_from_bbox(bbox=bbox, tags=tags)
-            except Exception as e:
-                last_error = e
-
-        raise RuntimeError(f"OSMnx bbox query failed. Last error: {last_error}")
+        if 'bbox' in parameters:
+            return ox.features_from_bbox(bbox=(west, south, east, north), tags=tags)
+        raise RuntimeError('Unsupported OSMnx bbox interface')
 
     @staticmethod
     def _safe_vector_export_frame(gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
@@ -228,42 +278,49 @@ class OSMPatchProcessor:
     ) -> gpd.GeoDataFrame:
         row = self.get_patch_row(patch_id)
         patch_name = Path(str(row["filename"])).stem
+        self.get_patch_profile(patch_id)
+        bounds = self.get_patch_bounds_wgs84(patch_id)
+        tags = self.build_tags_filter(semantic_keys)
+        query = {'bounds': bounds, 'tags': tags}
+        query_id = hashlib.sha256(json.dumps(query, sort_keys=True).encode()).hexdigest()[:16]
 
         cache_dir = self.output_dir / "cache_vectors"
         cache_dir.mkdir(parents=True, exist_ok=True)
 
         cache_format = cache_format.lower()
         if cache_format == "geojson":
-            cache_path = cache_dir / f"{patch_name}.geojson"
+            cache_path = cache_dir / f"{patch_name}_{query_id}.geojson"
         else:
-            cache_path = cache_dir / f"{patch_name}.gpkg"
+            cache_path = cache_dir / f"{patch_name}_{query_id}.gpkg"
 
         if use_cache and cache_path.exists():
             if self.verbose:
                 print(f"Loading cached OSM features: {cache_path}")
             return gpd.read_file(cache_path)
 
-        bounds = self.get_patch_bounds_wgs84(patch_id)
-        tags = self.build_tags_filter(semantic_keys)
-
         if self.verbose:
             print(f"Downloading OSM features for patch: {row['filename']}")
             print(f"WGS84 bounds: {bounds}")
             print(f"Semantic keys: {list(tags.keys())}")
 
-        gdf = self._download_features_osmnx_compat(
-            north=bounds["north"],
-            south=bounds["south"],
-            east=bounds["east"],
-            west=bounds["west"],
-            tags=tags,
-        )
+        try:
+            gdf = self._download_features_osmnx_compat(
+                north=bounds['north'], south=bounds['south'],
+                east=bounds['east'], west=bounds['west'], tags=tags,
+            )
+        except Exception as exc:
+            # Only the library's explicit no-features response is a valid empty query.
+            if (type(exc).__name__ == 'InsufficientResponseError'
+                    and ('No data elements in server response' in str(exc) or 'No matching features' in str(exc))):
+                gdf = gpd.GeoDataFrame(geometry=[], crs='EPSG:4326')
+            else:
+                raise
 
         gdf = gdf.reset_index(drop=False)
         gdf = gdf.to_crs(row["crs"])
         gdf["source_patch"] = str(row["filename"])
 
-        if use_cache:
+        if use_cache and not gdf.empty:
             self.export_vector(gdf, cache_path)
 
         time.sleep(self.overpass_pause_seconds)
@@ -577,6 +634,7 @@ class OSMPatchProcessor:
         for key in keys:
             class_specs[key] = {
                 "key": key,
+                "tags": self.CLASS_TAGS.get(key, {key: True}),
                 "allowed_values": None,
                 "geometry_types": geometry_type_map.get(key),
                 "buffer_meters": buffer_map.get(key),
@@ -605,6 +663,15 @@ class OSMPatchProcessor:
             out = out[out.geometry.geom_type.isin(allowed_geom)].copy()
 
         return out
+
+    @staticmethod
+    def filter_features_by_tags(gdf, tags):
+        selected = pd.Series(False, index=gdf.index)
+        for key, values in tags.items():
+            if key in gdf.columns:
+                matches = gdf[key].notna() if values is True else gdf[key].isin(values)
+                selected |= matches
+        return gdf[selected].copy()
 
     @staticmethod
     def geometry_type_summary(gdf: gpd.GeoDataFrame) -> pd.DataFrame:
@@ -693,6 +760,7 @@ class OSMPatchProcessor:
         output_dir: Optional[Union[str, Path]] = None,
         all_touched: bool = False,
         save_png: bool = False,
+        road_buffer_pixels: int = 3,
     ) -> Dict[str, np.ndarray]:
         row = self.get_patch_row(patch_id)
         profile = self.get_patch_profile(patch_id, dtype="uint8", count=1)
@@ -713,12 +781,12 @@ class OSMPatchProcessor:
             geometry_types = spec.get("geometry_types")
             buffer_meters = spec.get("buffer_meters")
 
-            sub = self.filter_features_by_key(
-                gdf=gdf,
-                key=key,
-                allowed_values=allowed_values,
-                geometry_types=geometry_types,
-            )
+            if 'tags' in spec:
+                sub = self.filter_features_by_tags(gdf, spec['tags'])
+                if geometry_types is not None:
+                    sub = sub[sub.geometry.geom_type.isin(geometry_types)].copy()
+            else:
+                sub = self.filter_features_by_key(gdf, key, allowed_values, geometry_types)
             sub = self._prepare_geometry_for_raster(
                 gdf=sub,
                 patch_id=patch_id,
@@ -739,14 +807,20 @@ class OSMPatchProcessor:
                     all_touched=all_touched,
                 )
 
+            if class_name in ('highway', 'roads'):
+                mask = thicken_mask(mask, road_buffer_pixels)
             masks[class_name] = mask
 
             tif_path = output_dir / f"{Path(str(row['filename'])).stem}_{class_name}_mask.tif"
+            if tif_path.exists():
+                raise FileExistsError(f'Refusing to overwrite mask: {tif_path}')
             with rasterio.open(tif_path, "w", **profile) as dst:
                 dst.write(mask, 1)
 
             if save_png:
-                png_path = output_dir / f"{Path(str(row['filename'])).stem}_{class_name}_mask.png"
+                preview_dir = output_dir / 'previews'
+                preview_dir.mkdir(exist_ok=True)
+                png_path = preview_dir / f"{Path(str(row['filename'])).stem}_{class_name}_mask.png"
                 plt.figure(figsize=(6, 6))
                 plt.imshow(mask, cmap="gray")
                 plt.title(f"{class_name} binary mask")
@@ -782,17 +856,16 @@ class OSMPatchProcessor:
                 raise KeyError(f"class_id_map is missing a value for class: {class_name}")
 
             spec = class_specs[class_name]
-            key = spec["key"]
             allowed_values = spec.get("allowed_values")
             geometry_types = spec.get("geometry_types")
             buffer_meters = spec.get("buffer_meters")
 
-            sub = self.filter_features_by_key(
-                gdf=gdf,
-                key=key,
-                allowed_values=allowed_values,
-                geometry_types=geometry_types,
-            )
+            if 'tags' in spec:
+                sub = self.filter_features_by_tags(gdf, spec['tags'])
+                if geometry_types is not None:
+                    sub = sub[sub.geometry.geom_type.isin(geometry_types)].copy()
+            else:
+                sub = self.filter_features_by_key(gdf, spec['key'], allowed_values, geometry_types)
             sub = self._prepare_geometry_for_raster(
                 gdf=sub,
                 patch_id=patch_id,
@@ -849,6 +922,7 @@ class OSMPatchProcessor:
         cache_format: str = "gpkg",
         all_touched: bool = False,
         save_png: bool = True,
+        road_buffer_pixels: int = 3,
     ) -> Dict[str, np.ndarray]:
         keys = list(selected_keys) if selected_keys is not None else list(self.semantic_keys)
 
@@ -873,6 +947,7 @@ class OSMPatchProcessor:
             output_dir=output_dir,
             all_touched=all_touched,
             save_png=save_png,
+            road_buffer_pixels=road_buffer_pixels,
         )
 
     def export_multiclass_mask_for_patch(

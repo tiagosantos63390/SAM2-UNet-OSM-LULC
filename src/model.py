@@ -102,8 +102,10 @@ class RFBModified(nn.Module):
         return self.relu(x_cat + self.conv_res(x))
 
 class DualDecoder_SAM2UNet(nn.Module):
-    def __init__(self, checkpoint_path=None, variant='tiny', num_classes=9):
+    def __init__(self, checkpoint_path=None, variant='tiny', num_classes=9, aux_channels=2):
         super().__init__()
+        if aux_channels not in (2, 4):
+            raise ValueError('aux_channels must be 2 or 4')
         self.encoder = _build_encoder_with_fallback(VARIANT_CFG[variant], checkpoint_path)
         
         backbone_channels = self._infer_backbone_channels()
@@ -122,10 +124,10 @@ class DualDecoder_SAM2UNet(nn.Module):
         self.side2 = nn.Conv2d(64, num_classes, kernel_size=1)
         self.head = nn.Conv2d(64, num_classes, kernel_size=1)
         
-        # OSM auxiliary head: channel 0 = roads, channel 1 = buildings
-        self.osm_side1 = nn.Conv2d(64, 2, kernel_size=1)
-        self.osm_side2 = nn.Conv2d(64, 2, kernel_size=1)
-        self.osm_head = nn.Conv2d(64, 2, kernel_size=1)
+        # Auxiliary channels: road, building, and optionally water, tree.
+        self.osm_side1 = nn.Conv2d(64, aux_channels, kernel_size=1)
+        self.osm_side2 = nn.Conv2d(64, aux_channels, kernel_size=1)
+        self.osm_head = nn.Conv2d(64, aux_channels, kernel_size=1)
         
         self.upsample8 = nn.Upsample(scale_factor=8, mode='bilinear', align_corners=True)
         self.upsample4 = nn.Upsample(scale_factor=4, mode='bilinear', align_corners=True)

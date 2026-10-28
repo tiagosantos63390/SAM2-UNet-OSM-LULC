@@ -63,6 +63,33 @@ OSM_labels/
 Pass these folders to the training script with `--osm-roads-dir` and
 `--osm-buildings-dir`.
 
+### Optional water and tree masks
+
+Use `--classes roads buildings water trees` to export all four classes, or
+select a subset. The default remains roads + buildings. `--road` selects roads
+alone and cannot be combined with `--classes`.
+
+Water uses `natural` in `{water, waterway}` OR `landuse` in `{reservoir, basin}`.
+Trees use `natural` in `{wood, scrub, tree_row}` OR `landuse=forest`. These are
+the v22 predicates; `natural=waterway` is literal. Query values are combined,
+and masks may overlap. Roads require `highway`; buildings require `building`.
+
+`--road-buffer-pixels` defaults to a disk radius of 3 native-grid pixels, applied
+once after road rasterization. Use `0` for thin roads. Other classes are not
+dilated; `all_touched=False` applies to all classes. Masks are uint8 0/1 TIFFs:
+`water/binary_masks/<tile>/<tile>_water_mask.tif` and
+`trees/binary_masks/<tile>/<tile>_trees_mask.tif`. PNG previews go in `previews/`.
+
+Grids preserve source dimensions, CRS and affine transform. Provide source TIFFs
+with `--image-root` or metadata containing `transform_a` through `transform_f`.
+Bounds alone are insufficient; missing or inconsistent grid information is rejected.
+
+`preparation_config.json` and per-tile `status/*.json` record settings, completed
+classes, empty queries and failures. Existing masks are never overwritten. Use
+a fresh output directory for unrecorded masks or changed class, filter, grid or
+dilation settings. `--force-refresh` refreshes pending queries, not completed masks.
+Historical datasets are not regenerated or relabelled.
+
 ## Pre-generated masks
 
 The ready-to-use rasterised masks (and the per-tile metadata CSVs above) are

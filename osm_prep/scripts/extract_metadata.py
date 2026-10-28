@@ -47,6 +47,8 @@ def extract_image_metadata(image_path):
             crs = src.crs
             bounds = src.bounds  # (left, bottom, right, top)
             transform = src.transform
+            if crs is None:
+                raise ValueError('Source TIFF has no CRS')
             
             # Pixel size (from transform)
             pixel_size_x = abs(transform.a)
@@ -66,8 +68,8 @@ def extract_image_metadata(image_path):
                 )
                 
                 # Reproject center point
-                from rasterio.warp import transform
-                xs, ys = transform(crs, CRS.from_epsg(4326), [center_x], [center_y])
+                from rasterio.warp import transform as warp_transform
+                xs, ys = warp_transform(crs, CRS.from_epsg(4326), [center_x], [center_y])
                 center_lon, center_lat = xs[0], ys[0]
             else:
                 left_wgs84, bottom_wgs84, right_wgs84, top_wgs84 = bounds.left, bounds.bottom, bounds.right, bounds.top
@@ -85,6 +87,7 @@ def extract_image_metadata(image_path):
                 "dtype": dtype,
                 "pixel_size_x": pixel_size_x,
                 "pixel_size_y": pixel_size_y,
+                **{f'transform_{key}': getattr(transform, key) for key in 'abcdef'},
                 "left": bounds.left,
                 "bottom": bounds.bottom,
                 "right": bounds.right,

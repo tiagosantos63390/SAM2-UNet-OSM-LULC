@@ -113,6 +113,22 @@ size 4 on 512x512 tiles, mixed precision, and early stopping on validation
 mIoU. Each run's best checkpoint is saved as `{run}_seed{seed}_final.pth`
 under `outputs/`, and its test metrics under `history/`.
 
+Use `--experiments NAME [NAME ...]` to select runs; the default five are unchanged.
+
+| Name | Auxiliary losses |
+| --- | --- |
+| `bldg_only_L0p25_bce_dice` | Building: 0.25 × BCE+Dice |
+| `bldg_only_L0p5_bce_dice` | Building: 0.50 × BCE+Dice |
+| `four_class_L0p5_d6_dt_mse` | Road/building/water/tree: 0.50 × DT-MSE each, d=6 |
+| `four_class_L0p5_d6_mixed` | Same weights; building uses BCE+Dice, others DT-MSE |
+
+Four-class runs require `--osm-water-dir` and `--osm-trees-dir`, each pointing
+to its mask directory. Auxiliary channels are road=0, building=1, water=2,
+tree=3; other runs retain two channels. BCE+Dice weights both terms equally,
+uses Dice smoothing of 1e-6, and excludes invalid supervision. These
+configurations are not verified reproductions of historical runs.
+Use a new `--work-dir` if run outputs already exist.
+
 ## Evaluation
 
 ```bash
