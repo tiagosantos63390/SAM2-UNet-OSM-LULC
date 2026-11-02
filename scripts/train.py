@@ -12,6 +12,7 @@ Example:
 
 import argparse
 import json
+import math
 import random
 import sys
 from pathlib import Path
@@ -28,6 +29,7 @@ sys.path.insert(0, str(REPO_ROOT))
 from src.dataset import OpenEarthMapDataset  # noqa: E402
 from src.metrics import evaluate_model  # noqa: E402
 from src.model import DualDecoder_SAM2UNet  # noqa: E402
+from src.checkpoints import file_sha256  # noqa: E402
 
 # ==============================================================================
 # Training configuration (as in the notebook)
@@ -56,7 +58,10 @@ def parse_args():
     p.add_argument('--data-root', required=True, help='OpenEarthMap_wo_xBD root directory')
     p.add_argument('--train-txt', required=True)
     p.add_argument('--val-txt', required=True)
-    p.add_argument('--test-txt', required=True)
+    p.add_argument('--test-txt', default=None)
+    p.add_argument('--evaluate-test', action='store_true', help='Evaluate the selected checkpoint on test')
+    p.add_argument('--validation-only', action='store_true', help='Train/select using validation without loading test')
+    p.add_argument('--dt-max-distance', type=float, default=6.0, help='DT clipping distance in resized mask pixels')
     p.add_argument('--osm-roads-dir', default=None, help='Rasterised OSM road masks')
     p.add_argument('--osm-buildings-dir', default=None, help='Rasterised OSM building masks')
     p.add_argument('--osm-water-dir', default=None, help='Rasterised OSM water masks')
@@ -66,7 +71,12 @@ def parse_args():
     p.add_argument('--sam-checkpoint', default='sam2_hiera_tiny.pt', help='Checkpoint filename inside --sam-checkpoints-dir')
     p.add_argument('--seeds', type=int, nargs='+', default=[42], help='Random seeds to run (one Kaggle session per seed fits the GPU budget)')
     p.add_argument('--work-dir', default='./sam2unet_augmented_osm_run')
-    return p.parse_args()
+    args = p.parse_args()
+    if not math.isfinite(args.dt_max_distance) or args.dt_max_distance <= 0:
+        p.error('--dt-max-distance must be finite and positive')
+    if args.evaluate_test and (args.validation_only or not args.test_txt):
+        p.error('--evaluate-test requires --test-txt and conflicts with --validation-only')
+    return args
 
 
 class EarlyStopping:
@@ -194,6 +204,21 @@ def check_auxiliary_supervision(loader, run):
             raise ValueError(f'Enabled auxiliary task {key} has no valid foreground in {checked} inspected training tiles')
 
 
+def configure_distance(runs, distance):
+    if not math.isfinite(distance) or distance <= 0:
+        raise ValueError('DT distance must be finite and positive')
+    configured = []
+    for original in runs:
+        run = dict(original, dt_max_distance=distance)
+        if distance != 6:
+            token = str(float(distance)).removesuffix('.0').replace('.', 'p')
+            run['name'] = run['name'].replace('_d6_', f'_d{token}_')
+            if run['name'] == original['name']:
+                run['name'] += f'_d{token}'
+        configured.append(run)
+    return configured
+
+
 def main():
     args = parse_args()
 
@@ -246,12 +271,16 @@ def main():
             'aux_channels': 4, 'building_loss': 'bce_dice' if formulation == 'mixed' else 'dt_mse',
             'dt_max_distance': 6.0,
         })
+    for run in list(run_plan):
+        if run['name'].startswith('roads_bldg_'):
+            run_plan.append({**run, 'name': run['name'] + '_bce_dice',
+                             'label': run['label'] + ' BCE+Dice', 'building_loss': 'bce_dice'})
     available = {run['name']: run for run in run_plan}
     selected = args.experiments if args.experiments is not None else default_names
     unknown = set(selected) - available.keys()
     if unknown:
         raise ValueError(f'Unknown experiments: {sorted(unknown)}. Choose from: {list(available)}')
-    run_plan = [available[name] for name in dict.fromkeys(selected)]
+    run_plan = configure_distance([available[name] for name in dict.fromkeys(selected)], args.dt_max_distance)
 
     for SEED in SEEDS_TO_RUN:
         print('\n' + '=' * 100)
@@ -279,12 +308,14 @@ def main():
             
             train_dataset = OpenEarthMapDataset(DATA_ROOT, osm_dir=run_osm_dir, bldg_dir=run_bldg_dir, split='train', size=IMAGE_SIZE, mode='train', seed=SEED, split_files=split_files, **extra_dirs)
             val_dataset = OpenEarthMapDataset(DATA_ROOT, osm_dir=run_osm_dir, bldg_dir=run_bldg_dir, split='val', size=IMAGE_SIZE, mode='val', seed=SEED, split_files=split_files, **extra_dirs)
-            test_dataset = OpenEarthMapDataset(DATA_ROOT, osm_dir=run_osm_dir, bldg_dir=run_bldg_dir, split='test', size=IMAGE_SIZE, mode='val', seed=SEED, split_files=split_files, **extra_dirs)
 
             generator = torch.Generator().manual_seed(SEED)
             train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE_DEFAULT, shuffle=True, num_workers=NUM_WORKERS, pin_memory=True, generator=generator, worker_init_fn=seed_worker)
             val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE_DEFAULT, shuffle=False, num_workers=NUM_WORKERS, pin_memory=True)
-            test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE_DEFAULT, shuffle=False, num_workers=NUM_WORKERS, pin_memory=True)
+            test_loader = None
+            if args.evaluate_test:
+                test_dataset = OpenEarthMapDataset(DATA_ROOT, osm_dir=run_osm_dir, bldg_dir=run_bldg_dir, split='test', size=IMAGE_SIZE, mode='val', seed=SEED, split_files=split_files, **extra_dirs)
+                test_loader = DataLoader(test_dataset, batch_size=BATCH_SIZE_DEFAULT, shuffle=False, num_workers=NUM_WORKERS, pin_memory=True)
 
             print(f"\nTraining run: {run_name} | {run['label']}")
             check_auxiliary_supervision(train_loader, run)
@@ -358,7 +389,7 @@ def main():
                 do_eval = (epoch % EVAL_EVERY == 0) or (epoch == EPOCHS)
                 metrics = None
                 if do_eval:
-                    metrics = evaluate_model(model, val_loader, device, num_classes=NUM_CLASSES, ignore_index=255, is_dual=True)
+                    metrics = evaluate_model(model, val_loader, device, num_classes=NUM_CLASSES, ignore_index=255, semantic_only=True)
                     print(f"[{run_name}] Epoch [{epoch}/{EPOCHS}] mIoU={metrics['miou']:.4f} B-mIoU={metrics['bmiou']:.4f} RoadIoU={metrics['road_iou']:.4f}")
 
                     if run_best_metrics is None or metrics['miou'] > run_best_metrics['miou']:
@@ -380,10 +411,13 @@ def main():
 
             # Save Metrics
             model.load_state_dict(torch.load(checkpoint, map_location=device, weights_only=True))
-            test_metrics = evaluate_model(model, test_loader, device, num_classes=NUM_CLASSES, ignore_index=255, is_dual=True)
+            test_metrics = None
+            if args.evaluate_test:
+                test_metrics = evaluate_model(model, test_loader, device, num_classes=NUM_CLASSES,
+                                              ignore_index=255, semantic_only=True)
 
             metrics_out = {
-                'test': test_metrics, 'best_epoch': best_epoch, 'stopping_epoch': actual_epochs,
+                'val': run_best_metrics, 'test': test_metrics, 'best_epoch': best_epoch, 'stopping_epoch': actual_epochs,
                 'best_miou': run_best_metrics['miou'], 'seed': SEED,
                 'configuration': {**vars(args), **run, 'variant': variant, 'epochs': EPOCHS,
                                   'aux_channels': aux_channels, 'auxiliary': auxiliary,
@@ -394,7 +428,11 @@ def main():
                                   'eta_min': 1e-7, 'gradient_clip_norm': 1.0,
                                   'sam_checkpoint': str(variant_ckpts[variant]),
                                   'mask_encoding': '0/1; other values invalid'},
-                'checkpoint': str(checkpoint),
+                'checkpoint': str(checkpoint), 'checkpoint_sha256': file_sha256(checkpoint),
+                'split_sha256': {key: file_sha256(path) for key, path in split_files.items()
+                                 if path and (key != 'test' or args.evaluate_test)},
+                'metric_settings': {'num_classes': 9, 'ignore_index': 255,
+                                    'boundary_dilation_ratio': .02, 'absent_classes': 'zero'},
             }
 
             with open(HISTORY_DIR / f'{run_name}_metrics.json', 'w', encoding='utf-8') as f:

@@ -22,7 +22,7 @@ from torchvision import transforms
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT))
 
-from src.model import DualDecoder_SAM2UNet  # noqa: E402
+from src.checkpoints import load_model  # noqa: E402
 
 IMAGE_SIZE = 512
 NUM_CLASSES = 9
@@ -57,17 +57,6 @@ def parse_args():
     return p.parse_args()
 
 
-def load_weights(model, weights_path):
-    state = torch.load(weights_path, map_location='cpu')
-    if isinstance(state, dict) and ('model_state_dict' in state or 'state_dict' in state):
-        state = state.get('model_state_dict', state.get('state_dict'))
-    if isinstance(state, dict) and len(state) > 0 and next(iter(state)).startswith('module.'):
-        state = {k.replace('module.', '', 1): v for k, v in state.items()}
-    missing, unexpected = model.load_state_dict(state, strict=False)
-    if missing or unexpected:
-        raise RuntimeError(f'Checkpoint/state-dict mismatch - missing: {len(missing)}, unexpected: {len(unexpected)}')
-
-
 def palette_png(mask, output_path):
     palette = []
     for color in CLASS_COLORS:
@@ -82,10 +71,7 @@ def main():
     args = parse_args()
     device = torch.device(args.device)
 
-    model = DualDecoder_SAM2UNet(checkpoint_path=args.sam_checkpoint, variant=args.variant,
-                                 num_classes=NUM_CLASSES).to(device)
-    load_weights(model, args.weights)
-    model.eval()
+    model = load_model(args.weights, args.sam_checkpoint, args.variant, device)
     print(f'Loaded checkpoint: {args.weights}')
 
     image = Image.open(args.image).convert('RGB')
@@ -94,7 +80,7 @@ def main():
     x = NORMALIZE(x).unsqueeze(0).to(device)
 
     with torch.no_grad():
-        logits_oem = model(x)[0]
+        logits_oem = model.forward_semantic(x)
         pred = torch.argmax(logits_oem, dim=1).squeeze(0).cpu().numpy().astype(np.uint8)
 
     output = args.output or str(Path(args.image).with_suffix('')) + '_pred.png'

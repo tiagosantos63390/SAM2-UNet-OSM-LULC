@@ -1,5 +1,4 @@
-"""Dual-decoder SAM2-UNet model, taken line-for-line from the final training
-notebook (notebooks/train_paper_models_seeds42-44.ipynb)."""
+"""SAM2-UNet with semantic and training-only auxiliary projections."""
 
 import torch
 import torch.nn as nn
@@ -104,8 +103,8 @@ class RFBModified(nn.Module):
 class DualDecoder_SAM2UNet(nn.Module):
     def __init__(self, checkpoint_path=None, variant='tiny', num_classes=9, aux_channels=2):
         super().__init__()
-        if aux_channels not in (2, 4):
-            raise ValueError('aux_channels must be 2 or 4')
+        if aux_channels not in (2, 3, 4):
+            raise ValueError('aux_channels must be 2, 3 (historical), or 4')
         self.encoder = _build_encoder_with_fallback(VARIANT_CFG[variant], checkpoint_path)
         
         backbone_channels = self._infer_backbone_channels()
@@ -124,7 +123,8 @@ class DualDecoder_SAM2UNet(nn.Module):
         self.side2 = nn.Conv2d(64, num_classes, kernel_size=1)
         self.head = nn.Conv2d(64, num_classes, kernel_size=1)
         
-        # Auxiliary channels: road, building, and optionally water, tree.
+        # Current layouts: road/building or road/building/water/tree.
+        # Historical three-channel heads keep an unused leading channel.
         self.osm_side1 = nn.Conv2d(64, aux_channels, kernel_size=1)
         self.osm_side2 = nn.Conv2d(64, aux_channels, kernel_size=1)
         self.osm_head = nn.Conv2d(64, aux_channels, kernel_size=1)
@@ -146,17 +146,26 @@ class DualDecoder_SAM2UNet(nn.Module):
         if was_training: self.encoder.train()
         return [f.shape[1] for f in feats]
 
-    def forward(self, x):
+    def forward(self, x, semantic_only=False):
         feats = self.encoder.forward_image(x)['backbone_fpn']
         x1, x2, x3 = self.rfb1(feats[0]), self.rfb2(feats[1]), self.rfb3(feats[2])
         
         x = self.up1(x3, x2)
-        out2_oem, out2_osm = self.side1(x), self.osm_side1(x)
+        out2_oem = self.side1(x)
+        if not semantic_only:
+            out2_osm = self.osm_side1(x)
         
         x = self.up2(x, x1)
-        out3_oem, out3_osm = self.side2(x), self.osm_side2(x)
+        out3_oem = self.side2(x)
+        if not semantic_only:
+            out3_osm = self.osm_side2(x)
         
         out_oem = self.upsample4(self.head(x)) + self.upsample8(out2_oem) + self.upsample4(out3_oem)
+        if semantic_only:
+            return out_oem
         out_osm = self.upsample4(self.osm_head(x)) + self.upsample8(out2_osm) + self.upsample4(out3_osm)
         
         return out_oem, out_osm
+
+    def forward_semantic(self, x):
+        return self.forward(x, semantic_only=True)

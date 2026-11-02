@@ -1,5 +1,5 @@
-torch>=2.3
-torchvision>=0.18
+torch>=2.5.1
+torchvision>=0.20.1
 numpy
 opencv-python-headless
 albumentations
@@ -9,7 +9,8 @@ tqdm
 rasterio
 
 # SAM2 (install from source):
-# pip install git+https://github.com/facebookresearch/sam2.git
+# Recorded SAM2 revision (see README for provenance and environment limits):
+# pip install git+https://github.com/facebookresearch/sam2.git@2b90b9f5ceec907a1c18123530e92e794ad901a4
 # SAM2 dependencies (installed automatically with the package above):
 # hydra-core, omegaconf, iopath, fvcore
 #

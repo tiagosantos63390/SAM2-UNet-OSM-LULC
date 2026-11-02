@@ -1,0 +1,901 @@
+{
+  "runs": [
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "baseline",
+      "seed": 42,
+      "source_version": 6,
+      "metrics": "results/history/baseline_seed42_metrics.json",
+      "metrics_sha256": "7b6de6929dcb7b15deff875c4e48685d2d2080a433922e7b5be5fa67abee2be7",
+      "source_artifact": "Paper/experiments/history/baseline_seed42_metrics.json",
+      "source_binding": "exact Kaggle v6 match",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/baseline_seed42/baseline_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "baseline",
+      "seed": 43,
+      "source_version": 6,
+      "metrics": "results/history/baseline_seed43_metrics.json",
+      "metrics_sha256": "c1468202bf5521a600e0c725c1aeccf3f15d2185331cfcd91affbb493787363f",
+      "source_artifact": "Paper/experiments/history/baseline_seed43_metrics.json",
+      "source_binding": "exact Kaggle v6 match",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/baseline_seed43/baseline_seed43_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "baseline",
+      "seed": 44,
+      "source_version": 6,
+      "metrics": "results/history/baseline_seed44_metrics.json",
+      "metrics_sha256": "9d64498a87d9610143f2b10926835ecc59dac0b0513a047778e7a04838265a50",
+      "source_artifact": "Paper/experiments/history/baseline_seed44_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/baseline_seed44/baseline_seed44_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p25",
+      "seed": 42,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p25_seed42_metrics.json",
+      "metrics_sha256": "0fe29d63b9c4cfdffd494177011830387ca4242a011d5e825603ab0225751619",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p25_seed42_metrics.json",
+      "source_binding": "exact Kaggle v6 match",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p25_seed42/roads_bldg_L0p25_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p25",
+      "seed": 43,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p25_seed43_metrics.json",
+      "metrics_sha256": "ca88da2ca6194dd1c9c97e798292c057cd6ea3fb508594d2b39c88ad0c4ac4cf",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p25_seed43_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_bldg_L0p25_seed43/roads_bldg_L0p25_seed43_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p25",
+      "seed": 44,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p25_seed44_metrics.json",
+      "metrics_sha256": "ed362b03a4ead85662496d1325179522495578bf36f60a28b705e50e8a3380db",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p25_seed44_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_bldg_L0p25_seed44/roads_bldg_L0p25_seed44_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p5",
+      "seed": 42,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p5_seed42_metrics.json",
+      "metrics_sha256": "4acdad2caacb29b56d3a72539ea709b307cbaaeb5358e94eab33db46cbe10df1",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p5_seed42_metrics.json",
+      "source_binding": "exact Kaggle v6 match",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p5_seed42/roads_bldg_L0p5_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p5",
+      "seed": 43,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p5_seed43_metrics.json",
+      "metrics_sha256": "5cc1a16fc3ad2fc0d886fa7c30af8ea3cba0b81d86c218cf5613f84871fcbc5c",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p5_seed43_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_bldg_L0p5_seed43/roads_bldg_L0p5_seed43_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p5",
+      "seed": 44,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p5_seed44_metrics.json",
+      "metrics_sha256": "55cbfa7f6f8a5c93a375852f71ae693726ee916922a122fdfc4087e6d0a84002",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p5_seed44_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_bldg_L0p5_seed44/roads_bldg_L0p5_seed44_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p75",
+      "seed": 42,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p75_seed42_metrics.json",
+      "metrics_sha256": "926acefbc294867cb3eb6daa62d9d19e76f94fb003872b0ee97e07433e8c4bbb",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p75_seed42_metrics.json",
+      "source_binding": "exact Kaggle v6 match",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p75_seed42/roads_bldg_L0p75_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p75",
+      "seed": 43,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p75_seed43_metrics.json",
+      "metrics_sha256": "556fc20e640c9cda132e0a4d20d3f0c4de9d9b6493fa114874cc502c1fa4212d",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p75_seed43_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_bldg_L0p75_seed43/roads_bldg_L0p75_seed43_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_bldg_L0p75",
+      "seed": 44,
+      "source_version": 6,
+      "metrics": "results/history/roads_bldg_L0p75_seed44_metrics.json",
+      "metrics_sha256": "44fb3f1028052cff8e3ff2316c0658fbaab35ccd365aec7f44718dc81dfbfe38",
+      "source_artifact": "Paper/experiments/history/roads_bldg_L0p75_seed44_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_bldg_L0p75_seed44/roads_bldg_L0p75_seed44_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_only_L0p5",
+      "seed": 42,
+      "source_version": 6,
+      "metrics": "results/history/roads_only_L0p5_seed42_metrics.json",
+      "metrics_sha256": "76dbcd7131ced8fe4d65f488ee5ffe0202fe3ecc858c1e878f6f7da4a9546006",
+      "source_artifact": "Paper/experiments/history/roads_only_L0p5_seed42_metrics.json",
+      "source_binding": "exact Kaggle v6 match",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_only_L0p5_seed42/roads_only_L0p5_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_only_L0p5",
+      "seed": 43,
+      "source_version": 6,
+      "metrics": "results/history/roads_only_L0p5_seed43_metrics.json",
+      "metrics_sha256": "0d1973f14c4bf05f703caee49ab605d5c8f213396118433f090a8274fff30f25",
+      "source_artifact": "Paper/experiments/history/roads_only_L0p5_seed43_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_only_L0p5_seed43/roads_only_L0p5_seed43_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models",
+      "configuration": "roads_only_L0p5",
+      "seed": 44,
+      "source_version": 6,
+      "metrics": "results/history/roads_only_L0p5_seed44_metrics.json",
+      "metrics_sha256": "4678b7bebaa65f1b8a4d2cdfc8d72357354f70dc23c75ad577b07017d19c0528",
+      "source_artifact": "Paper/experiments/history/roads_only_L0p5_seed44_metrics.json",
+      "source_binding": "local/public summary only; v6 source-family candidate",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "expected by source: outputs/roads_only_L0p5_seed44/roads_only_L0p5_seed44_final.pth; exact listed artifact not established",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9ea80b6f5ba8a3ac8a9479e6459364b032637d1d5012d4a8919628a13be3d03d",
+      "auxiliary_formulation": "road/building DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p25",
+      "seed": 42,
+      "source_version": 2,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v2/roads_bldg_L0p25_seed42_metrics.json",
+      "metrics_sha256": "6014776df0b75ac0b9721a9543bb1d3d929250290487e79c060144750f4a8da8",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v2/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p25_seed42_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p25_seed42/roads_bldg_L0p25_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "f0f630a950325d0032956dfa6f6b20d4d3784739afbe73ccefcd911a74a460e7",
+      "validation_summary": {
+        "epoch": 30,
+        "miou": 0.6648,
+        "bmiou": 0.5667,
+        "road_iou": 0.566,
+        "building_iou": 0.7422
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v2/session_text.txt",
+        "line": "roads_bldg_L0p25_seed42                      Yes       0.5       6.0       30          0.6648      0.5667      0.5660    0.7422    ",
+        "precision": "four printed decimal places",
+        "sha256": "72e48a70568e3baa39957c1308cd977edf24b81e30dad58aee80b9f5d53a8b7e"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p5",
+      "seed": 42,
+      "source_version": 2,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v2/roads_bldg_L0p5_seed42_metrics.json",
+      "metrics_sha256": "81baf960198b2a1c135ea1381d61e5d791892aa556c30a0bd30b0d536de01e37",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v2/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p5_seed42_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p5_seed42/roads_bldg_L0p5_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "f0f630a950325d0032956dfa6f6b20d4d3784739afbe73ccefcd911a74a460e7",
+      "validation_summary": {
+        "epoch": 34,
+        "miou": 0.6645,
+        "bmiou": 0.5682,
+        "road_iou": 0.5732,
+        "building_iou": 0.7423
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v2/session_text.txt",
+        "line": "roads_bldg_L0p5_seed42                       Yes       0.5       6.0       34          0.6645      0.5682      0.5732    0.7423    ",
+        "precision": "four printed decimal places",
+        "sha256": "72e48a70568e3baa39957c1308cd977edf24b81e30dad58aee80b9f5d53a8b7e"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p75",
+      "seed": 42,
+      "source_version": 2,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v2/roads_bldg_L0p75_seed42_metrics.json",
+      "metrics_sha256": "85eaef4a5fa0ab75297decc390dc5644ce10e31e150902cd98616f98ea74cc63",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v2/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p75_seed42_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p75_seed42/roads_bldg_L0p75_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "f0f630a950325d0032956dfa6f6b20d4d3784739afbe73ccefcd911a74a460e7",
+      "validation_summary": {
+        "epoch": 44,
+        "miou": 0.6648,
+        "bmiou": 0.5701,
+        "road_iou": 0.5776,
+        "building_iou": 0.7449
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v2/session_text.txt",
+        "line": "roads_bldg_L0p75_seed42                      Yes       0.5       6.0       44          0.6648      0.5701      0.5776    0.7449    ",
+        "precision": "four printed decimal places",
+        "sha256": "72e48a70568e3baa39957c1308cd977edf24b81e30dad58aee80b9f5d53a8b7e"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p25",
+      "seed": 43,
+      "source_version": 3,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v3/roads_bldg_L0p25_seed43_metrics.json",
+      "metrics_sha256": "c1ac23fca80c21c0f04854126c5d8d2385363982b4e223387ae7697b1fca0623",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v3/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p25_seed43_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p25_seed43/roads_bldg_L0p25_seed43_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "594884211c46fbdc9556b506de0afdf57c8e0a92d30af619e7f0d6270fd2db38",
+      "validation_summary": {
+        "epoch": 28,
+        "miou": 0.6606,
+        "bmiou": 0.5627,
+        "road_iou": 0.571,
+        "building_iou": 0.742
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v3/session_text.txt",
+        "line": "roads_bldg_L0p25_seed43                      Yes       0.5       6.0       28          0.6606      0.5627      0.5710    0.7420    ",
+        "precision": "four printed decimal places",
+        "sha256": "d9c055dfdfe71ed5142cd047c8f5b99974785090e4935652c066c9c5fb30805c"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p5",
+      "seed": 43,
+      "source_version": 3,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v3/roads_bldg_L0p5_seed43_metrics.json",
+      "metrics_sha256": "e8ce5706f88611e36beff7237b1170073925bf24881f11c6fd9747f540e6659b",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v3/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p5_seed43_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p5_seed43/roads_bldg_L0p5_seed43_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "594884211c46fbdc9556b506de0afdf57c8e0a92d30af619e7f0d6270fd2db38",
+      "validation_summary": {
+        "epoch": 59,
+        "miou": 0.6734,
+        "bmiou": 0.579,
+        "road_iou": 0.586,
+        "building_iou": 0.7512
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v3/session_text.txt",
+        "line": "roads_bldg_L0p5_seed43                       Yes       0.5       6.0       59          0.6734      0.5790      0.5860    0.7512    ",
+        "precision": "four printed decimal places",
+        "sha256": "d9c055dfdfe71ed5142cd047c8f5b99974785090e4935652c066c9c5fb30805c"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p75",
+      "seed": 43,
+      "source_version": 3,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v3/roads_bldg_L0p75_seed43_metrics.json",
+      "metrics_sha256": "73013b89da7cbc50750e33363706f96817592d3c4f7aad76acb6cabcf785e715",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v3/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p75_seed43_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p75_seed43/roads_bldg_L0p75_seed43_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "594884211c46fbdc9556b506de0afdf57c8e0a92d30af619e7f0d6270fd2db38",
+      "validation_summary": {
+        "epoch": 32,
+        "miou": 0.6662,
+        "bmiou": 0.5684,
+        "road_iou": 0.5751,
+        "building_iou": 0.7416
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v3/session_text.txt",
+        "line": "roads_bldg_L0p75_seed43                      Yes       0.5       6.0       32          0.6662      0.5684      0.5751    0.7416    ",
+        "precision": "four printed decimal places",
+        "sha256": "d9c055dfdfe71ed5142cd047c8f5b99974785090e4935652c066c9c5fb30805c"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p25",
+      "seed": 44,
+      "source_version": 4,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v4/roads_bldg_L0p25_seed44_metrics.json",
+      "metrics_sha256": "dd174f6bbd5f4a27290bdf0a05c0bc450c3109cb08ca7776a0b5b44af36c90b4",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v4/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p25_seed44_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p25_seed44/roads_bldg_L0p25_seed44_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "427c2867c19f2519352e5042630e3abd7043337d5df5ebb2a2967404bcbce9b0",
+      "validation_summary": {
+        "epoch": 24,
+        "miou": 0.659,
+        "bmiou": 0.5598,
+        "road_iou": 0.5658,
+        "building_iou": 0.7303
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v4/session_text.txt",
+        "line": "roads_bldg_L0p25_seed44                      Yes       0.5       6.0       24          0.6590      0.5598      0.5658    0.7303    ",
+        "precision": "four printed decimal places",
+        "sha256": "9630d614ecbe56d3fcce6027f832a54b6f3d495c5324857dcf428374a6658397"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p5",
+      "seed": 44,
+      "source_version": 4,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v4/roads_bldg_L0p5_seed44_metrics.json",
+      "metrics_sha256": "dc92accfe5c5c0920b6d777a730ceba9d915aca50418e207aab43f2b4279317c",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v4/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p5_seed44_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p5_seed44/roads_bldg_L0p5_seed44_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "427c2867c19f2519352e5042630e3abd7043337d5df5ebb2a2967404bcbce9b0",
+      "validation_summary": {
+        "epoch": 41,
+        "miou": 0.6688,
+        "bmiou": 0.5731,
+        "road_iou": 0.586,
+        "building_iou": 0.7443
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v4/session_text.txt",
+        "line": "roads_bldg_L0p5_seed44                       Yes       0.5       6.0       41          0.6688      0.5731      0.5860    0.7443    ",
+        "precision": "four printed decimal places",
+        "sha256": "9630d614ecbe56d3fcce6027f832a54b6f3d495c5324857dcf428374a6658397"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "roads_bldg_L0p75",
+      "seed": 44,
+      "source_version": 4,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v4/roads_bldg_L0p75_seed44_metrics.json",
+      "metrics_sha256": "770777aeac78ac7f4053e5f3baae287292e0f2d6b3b74d97f0d74680d9545922",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v4/outputs/sam2unet_augmented_osm_run/history/roads_bldg_L0p75_seed44_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/roads_bldg_L0p75_seed44/roads_bldg_L0p75_seed44_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "427c2867c19f2519352e5042630e3abd7043337d5df5ebb2a2967404bcbce9b0",
+      "validation_summary": {
+        "epoch": 37,
+        "miou": 0.6646,
+        "bmiou": 0.5656,
+        "road_iou": 0.5625,
+        "building_iou": 0.74
+      },
+      "validation_summary_source": {
+        "artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v4/session_text.txt",
+        "line": "roads_bldg_L0p75_seed44                      Yes       0.5       6.0       37          0.6646      0.5656      0.5625    0.7400    ",
+        "precision": "four printed decimal places",
+        "sha256": "9630d614ecbe56d3fcce6027f832a54b6f3d495c5324857dcf428374a6658397"
+      },
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "bldg_only_L0p25",
+      "seed": 42,
+      "source_version": 8,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v8/bldg_only_L0p25_seed42_metrics.json",
+      "metrics_sha256": "46b5b680707bbe833d54097b3f6830aee6ea6f663e72698267ff6159a400f7f2",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v8/outputs/sam2unet_augmented_osm_run/history/bldg_only_L0p25_seed42_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/bldg_only_L0p25_seed42/bldg_only_L0p25_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9a4e170ffc1b4953da3c8d8c1e1034fa8727e83d8a4f3b8a615b9d48a03f8f15",
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "bldg_only_L0p25",
+      "seed": 43,
+      "source_version": 8,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v8/bldg_only_L0p25_seed43_metrics.json",
+      "metrics_sha256": "e8db1f6bb31ec32dbd699ea6d19e303353e2831eee9f37bcfe840284cdd1e49c",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v8/outputs/sam2unet_augmented_osm_run/history/bldg_only_L0p25_seed43_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/bldg_only_L0p25_seed43/bldg_only_L0p25_seed43_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9a4e170ffc1b4953da3c8d8c1e1034fa8727e83d8a4f3b8a615b9d48a03f8f15",
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "bldg_only_L0p25",
+      "seed": 44,
+      "source_version": 8,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v8/bldg_only_L0p25_seed44_metrics.json",
+      "metrics_sha256": "31b78794f6c008836c3993e9259fd336d6f21390f42a7864509d95effe0089d0",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v8/outputs/sam2unet_augmented_osm_run/history/bldg_only_L0p25_seed44_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/bldg_only_L0p25_seed44/bldg_only_L0p25_seed44_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9a4e170ffc1b4953da3c8d8c1e1034fa8727e83d8a4f3b8a615b9d48a03f8f15",
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "bldg_only_L0p5",
+      "seed": 42,
+      "source_version": 8,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v8/bldg_only_L0p5_seed42_metrics.json",
+      "metrics_sha256": "1fc400a2047429eb4b307c20e3a930095111c0bca8a07256df641552a953a641",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v8/outputs/sam2unet_augmented_osm_run/history/bldg_only_L0p5_seed42_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/bldg_only_L0p5_seed42/bldg_only_L0p5_seed42_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9a4e170ffc1b4953da3c8d8c1e1034fa8727e83d8a4f3b8a615b9d48a03f8f15",
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "bldg_only_L0p5",
+      "seed": 43,
+      "source_version": 8,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v8/bldg_only_L0p5_seed43_metrics.json",
+      "metrics_sha256": "1018835f0c94ff08e7b681865a531057c6ddfc3c14f39f062449cf4de87396ae",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v8/outputs/sam2unet_augmented_osm_run/history/bldg_only_L0p5_seed43_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/bldg_only_L0p5_seed43/bldg_only_L0p5_seed43_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9a4e170ffc1b4953da3c8d8c1e1034fa8727e83d8a4f3b8a615b9d48a03f8f15",
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-paper-models-bce-dice",
+      "configuration": "bldg_only_L0p5",
+      "seed": 44,
+      "source_version": 8,
+      "metrics": "results/historical/sam2unet-train-kaggle-paper-models-bce-dice/v8/bldg_only_L0p5_seed44_metrics.json",
+      "metrics_sha256": "56d8353864193e9a9988bf46981f4ee6aaffe3cfa6db4424f4a2e09c4ebae526",
+      "source_artifact": "sam2unet-train-kaggle-paper-models-bce-dice/v8/outputs/sam2unet_augmented_osm_run/history/bldg_only_L0p5_seed44_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "unattested historical mount",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/bldg_only_L0p5_seed44/bldg_only_L0p5_seed44_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "9a4e170ffc1b4953da3c8d8c1e1034fa8727e83d8a4f3b8a615b9d48a03f8f15",
+      "auxiliary_formulation": "building BCE+Dice; road DT-MSE when enabled",
+      "aux_layout": [
+        "unused",
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-distance-transform3",
+      "configuration": "tiny_dt_lambda_0p5_d10p0",
+      "seed": 42,
+      "source_version": 5,
+      "metrics": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_dt_lambda_0p5_d10p0_metrics.json",
+      "metrics_sha256": "d3307abecb5380b739b5fc328a3a2dc294280dbe35fe8766fd15efeb7933534b",
+      "source_artifact": "sam2unet-train-kaggle-distance-transform3/v5/outputs/sam2unet_augmented_osm_run/history/tiny_dt_lambda_0p5_d10p0_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1880/403/404 in execution log; compatible with OEM v2",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_dt_lambda_0p5_d10p0/tiny_dt_lambda_0p5_d10p0_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "3fdeb32883886cd2798a3730bdce39b052cb904653c694044ec13a1a2cd1c089",
+      "validation_history": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_dt_lambda_0p5_d10p0_history.json",
+      "auxiliary_formulation": "road DT-MSE when enabled",
+      "aux_layout": [
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-distance-transform3",
+      "configuration": "tiny_dt_lambda_0p5_d3p0",
+      "seed": 42,
+      "source_version": 5,
+      "metrics": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_dt_lambda_0p5_d3p0_metrics.json",
+      "metrics_sha256": "0908e4b9c55e54525ee0afc181be27bf4400c22698c5c77ed8684b528fd9311b",
+      "source_artifact": "sam2unet-train-kaggle-distance-transform3/v5/outputs/sam2unet_augmented_osm_run/history/tiny_dt_lambda_0p5_d3p0_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1880/403/404 in execution log; compatible with OEM v2",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_dt_lambda_0p5_d3p0/tiny_dt_lambda_0p5_d3p0_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "3fdeb32883886cd2798a3730bdce39b052cb904653c694044ec13a1a2cd1c089",
+      "validation_history": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_dt_lambda_0p5_d3p0_history.json",
+      "auxiliary_formulation": "road DT-MSE when enabled",
+      "aux_layout": [
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-distance-transform3",
+      "configuration": "tiny_dt_lambda_0p5_d6p0",
+      "seed": 42,
+      "source_version": 5,
+      "metrics": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_dt_lambda_0p5_d6p0_metrics.json",
+      "metrics_sha256": "cab6591af27b627076c4502465c49490d73994cf4de2f3702994e751a4f7dc86",
+      "source_artifact": "sam2unet-train-kaggle-distance-transform3/v5/outputs/sam2unet_augmented_osm_run/history/tiny_dt_lambda_0p5_d6p0_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1880/403/404 in execution log; compatible with OEM v2",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_dt_lambda_0p5_d6p0/tiny_dt_lambda_0p5_d6p0_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "3fdeb32883886cd2798a3730bdce39b052cb904653c694044ec13a1a2cd1c089",
+      "validation_history": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_dt_lambda_0p5_d6p0_history.json",
+      "auxiliary_formulation": "road DT-MSE when enabled",
+      "aux_layout": [
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-distance-transform3",
+      "configuration": "tiny_no_osm",
+      "seed": 42,
+      "source_version": 5,
+      "metrics": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_no_osm_metrics.json",
+      "metrics_sha256": "5a99f36a894ab122a0c5e5b661fa0acbfd419eb76238f514f56fd9f7d0db1d78",
+      "source_artifact": "sam2unet-train-kaggle-distance-transform3/v5/outputs/sam2unet_augmented_osm_run/history/tiny_no_osm_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1880/403/404 in execution log; compatible with OEM v2",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_no_osm/tiny_no_osm_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "3fdeb32883886cd2798a3730bdce39b052cb904653c694044ec13a1a2cd1c089",
+      "validation_history": "results/historical/sam2unet-train-kaggle-distance-transform3/v5/tiny_no_osm_history.json",
+      "auxiliary_formulation": "road DT-MSE when enabled",
+      "aux_layout": [
+        "road",
+        "building"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-double-classifier-r-b-t-w",
+      "configuration": "tiny_4class_d6",
+      "seed": 42,
+      "source_version": 3,
+      "metrics": "results/historical/sam2unet-train-kaggle-double-classifier-r-b-t-w/v3/tiny_4class_d6_metrics.json",
+      "metrics_sha256": "dd39eeb2317ec62740b1dc8fb36f2ac3011d0e11ef08cf56e6d58b7828cee4f1",
+      "source_artifact": "sam2unet-train-kaggle-double-classifier-r-b-t-w/v3/outputs/sam2unet_augmented_osm_run/history/tiny_4class_d6_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1879/404/404 in execution log; compatible with OEM v3",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_4class_d6/tiny_4class_d6_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "1f8d05407496f8afcdbc413dfe2514eddf40d512bef7d3a18de0dfc652aebf94",
+      "auxiliary_formulation": "historical mixed: building BCE+Dice; other tasks interior DT-MSE",
+      "aux_layout": [
+        "road",
+        "building",
+        "water",
+        "tree"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-double-classifier-r-b-t-w",
+      "configuration": "tiny_4class_d6",
+      "seed": 43,
+      "source_version": 4,
+      "metrics": "results/historical/sam2unet-train-kaggle-double-classifier-r-b-t-w/v4/tiny_4class_d6_metrics.json",
+      "metrics_sha256": "f210ca11dc7bb2c20d9d31efbaaeb2a03967eb01767c22065a568ce6cc0ec00d",
+      "source_artifact": "sam2unet-train-kaggle-double-classifier-r-b-t-w/v4/outputs/sam2unet_augmented_osm_run/history/tiny_4class_d6_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1879/404/404 in execution log; compatible with OEM v3",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_4class_d6/tiny_4class_d6_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "03e7100061c2819f9e996cfc4c8d7bcc438ad212ea998310f5c67900dfadc0b2",
+      "auxiliary_formulation": "historical mixed: building BCE+Dice; other tasks interior DT-MSE",
+      "aux_layout": [
+        "road",
+        "building",
+        "water",
+        "tree"
+      ]
+    },
+    {
+      "family": "sam2unet-train-kaggle-double-classifier-r-b-t-w",
+      "configuration": "tiny_4class_d6",
+      "seed": 44,
+      "source_version": 5,
+      "metrics": "results/historical/sam2unet-train-kaggle-double-classifier-r-b-t-w/v5/tiny_4class_d6_metrics.json",
+      "metrics_sha256": "94b4ca8a50280efec355569cf46c3eb300735afaa80d2128b943a820fe547854",
+      "source_artifact": "sam2unet-train-kaggle-double-classifier-r-b-t-w/v5/outputs/sam2unet_augmented_osm_run/history/tiny_4class_d6_metrics.json",
+      "source_binding": "executed Kaggle output",
+      "split_identity": "1879/404/404 in execution log; compatible with OEM v3",
+      "checkpoint_association": "listed: sam2unet_augmented_osm_run/outputs/tiny_4class_d6/tiny_4class_d6_final.pth; not evaluated",
+      "checkpoint_sha256": null,
+      "provenance": "historical",
+      "source_sha256": "1075aa6701b431cd65166dfee5532c091cd8520da72086fc1ee931a956e1a009",
+      "auxiliary_formulation": "historical mixed: building BCE+Dice; other tasks interior DT-MSE",
+      "aux_layout": [
+        "road",
+        "building",
+        "water",
+        "tree"
+      ]
+    }
+  ]
+}

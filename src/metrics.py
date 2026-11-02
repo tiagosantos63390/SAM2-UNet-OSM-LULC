@@ -1,6 +1,4 @@
-"""Evaluation metrics (mIoU, precision, recall, F1, Boundary IoU), taken
-line-for-line from the final training notebook
-(notebooks/train_paper_models_seeds42-44.ipynb)."""
+"""Nine-class OEM macro metrics and boundary IoU; ignore only label 255."""
 
 import cv2
 import numpy as np
@@ -56,7 +54,7 @@ def _scores_from_stats(conf_mat, boundary_inter, boundary_union):
     }
 
 @torch.no_grad()
-def evaluate_model(model, dataloader, device, num_classes=9, ignore_index=255, is_dual=False):
+def evaluate_model(model, dataloader, device, num_classes=9, ignore_index=255, is_dual=False, semantic_only=False):
     model.eval()
     conf_mat = np.zeros((num_classes, num_classes), dtype=np.float64)
     b_inter = np.zeros(num_classes, dtype=np.float64)
@@ -64,7 +62,10 @@ def evaluate_model(model, dataloader, device, num_classes=9, ignore_index=255, i
     for batch in dataloader:
         images = batch['image'].to(device, non_blocking=True)
         labels = batch['label'].long().cpu().numpy()
-        logits_oem = model(images)[0] if is_dual else model(images)
+        if semantic_only:
+            logits_oem = model.forward_semantic(images)
+        else:
+            logits_oem = model(images)[0] if is_dual else model(images)
         preds = torch.argmax(logits_oem, dim=1).cpu().numpy()
         for p, t in zip(preds, labels):
             _confusion_update(conf_mat, p, t, num_classes, ignore_index)
